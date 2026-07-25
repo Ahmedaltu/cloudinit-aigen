@@ -27,19 +27,12 @@ runcmd:
 - **Local-first** — defaults to Ollama (free, offline)
 - **Optional cloud backend** — Anthropic Claude for higher quality
 - **Schema validation** — yamllint + cloud-init schema on every generation
-- **Installable via PPA** — `sudo apt install cloudinit-aigen`
 
 ## Install
 
+Install from source:
+
 ```bash
-# Via PPA (Ubuntu/Debian)
-sudo add-apt-repository ppa:ahmedaltu/cloudinit-aigen
-sudo apt install cloudinit-aigen
-
-# Via pip
-pip install cloudinit-aigen
-
-# From source
 git clone https://github.com/Ahmedaltu/cloudinit-aigen
 cd cloudinit-aigen
 pip install -e .
@@ -88,6 +81,10 @@ PlanTool   GenerateTool  ValidateTool
 (LLM)      (LLM)         (yamllint +
                           schema check)
 ```
+
+## Roadmap
+
+- Planned: PyPI and Launchpad PPA distribution (currently source-install only)
 
 ## Contributing
 
