@@ -58,7 +58,7 @@ class Orchestrator:
         # Step 3: Validate + fix loop
         result: ValidationResult | None = None
         for attempt in range(self.max_retries):
-            result = validate_yaml(yaml_str)
+            result = validate_yaml(yaml_str, user_prompt=user_prompt)
             self.last_validation_result = result
             if result.ok:
                 if result.warnings:
@@ -69,7 +69,7 @@ class Orchestrator:
             self._log(f"Validation failed (attempt {attempt + 1}/{self.max_retries}): {result.errors}")
             if attempt < self.max_retries - 1:
                 self._log("Asking LLM to fix errors...")
-                yaml_str = self.generator.fix(yaml_str, result.errors)
+                yaml_str = self.generator.fix(yaml_str, user_prompt, result.errors)
 
         assert result is not None
         return self._annotate_yaml(

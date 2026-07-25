@@ -22,7 +22,7 @@ def test_failed_validation_keeps_cloud_config_header(monkeypatch):
     monkeypatch.setattr(
         orchestrator_module,
         "validate_yaml",
-        lambda yaml_str: ValidationResult(ok=False, errors=["boom"]),
+        lambda yaml_str, user_prompt=None: ValidationResult(ok=False, errors=["boom"]),
     )
 
     result = Orchestrator(StubBackend(), max_retries=1).run("nginx server")

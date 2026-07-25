@@ -27,3 +27,39 @@ def test_missing_external_tools_are_reported_as_warnings(monkeypatch):
     assert result.ok
     assert any("yamllint" in warning for warning in result.warnings)
     assert any("cloud-init" in warning for warning in result.warnings)
+
+
+def test_passwordless_sudo_request_requires_nopasswd(monkeypatch):
+    def missing_command(*args, **kwargs):
+        raise FileNotFoundError
+
+    yaml_str = "#cloud-config\nusers:\n  - name: deploy\n    groups: [sudo]\n"
+    monkeypatch.setattr(validator.subprocess, "run", missing_command)
+    result = validate_yaml(yaml_str, user_prompt="Ubuntu server with a deploy user and passwordless sudo")
+
+    assert not result.ok
+    assert any("passwordless sudo" in error for error in result.errors)
+
+
+def test_prompt_ssh_key_without_key_material_warns_when_output_omits_it(monkeypatch):
+    def missing_command(*args, **kwargs):
+        raise FileNotFoundError
+
+    yaml_str = "#cloud-config\nusers:\n  - name: deploy\n"
+    monkeypatch.setattr(validator.subprocess, "run", missing_command)
+    result = validate_yaml(yaml_str, user_prompt="Ubuntu server with my SSH key")
+
+    assert result.ok
+    assert any("does not include a public key" in warning for warning in result.warnings)
+
+
+def test_invented_ssh_key_is_rejected(monkeypatch):
+    def missing_command(*args, **kwargs):
+        raise FileNotFoundError
+
+    yaml_str = "#cloud-config\nusers:\n  - name: deploy\n    ssh_authorized_keys:\n      - ssh-rsa AAAArealisticlookingkeymaterial comment\n"
+    monkeypatch.setattr(validator.subprocess, "run", missing_command)
+    result = validate_yaml(yaml_str, user_prompt="Ubuntu server with my SSH key")
+
+    assert not result.ok
+    assert any("do not invent ssh_authorized_keys values" in error for error in result.errors)

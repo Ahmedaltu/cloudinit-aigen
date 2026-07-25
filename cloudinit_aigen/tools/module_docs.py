@@ -22,6 +22,12 @@ runcmd:
   - command string
   - [list, form, also, valid]
 """,
+    "ssh_authorized_keys": """
+users:
+  - name: <username>
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAA...
+""",
     "write_files": """
 write_files:
   - path: /etc/myapp/config.yaml
