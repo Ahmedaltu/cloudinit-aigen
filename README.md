@@ -2,24 +2,10 @@
 
 > Generate valid cloud-init `user-data` YAML from natural language using a local or cloud LLM.
 
-```bash
-$ cloudinit-aigen "Ubuntu VM with Docker, a non-root user called deploy, and this SSH key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB84Gfl7oZpojmHJO2DWJbPf0iy0kP+nL3wrH0MrZHpe deploy@laptop"
-```
+## What it does
 
-```yaml
-#cloud-config
-users:
-  - name: deploy
-    sudo: ALL=(ALL) NOPASSWD:ALL
-    shell: /bin/bash
-    ssh_authorized_keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB84Gfl7oZpojmHJO2DWJbPf0iy0kP+nL3wrH0MrZHpe deploy@laptop
-packages:
-  - docker.io
-runcmd:
-  - systemctl enable docker
-  - usermod -aG docker deploy
-```
+You describe a server in plain English; it gives you a ready-to-use `user-data` config file.
+Paste that file into the "user data" / "cloud-init" field when creating a VM (AWS, DigitalOcean, Hetzner, multipass, …) and the server sets itself up on first boot — users, packages, keys, all of it. No manual SSH-and-configure needed.
 
 ## Features
 
