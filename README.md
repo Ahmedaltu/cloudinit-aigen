@@ -3,7 +3,7 @@
 > Generate valid cloud-init `user-data` YAML from natural language using a local or cloud LLM.
 
 ```bash
-$ cloudinit-aigen "Ubuntu VM with Docker, a non-root user called deploy, and my SSH key"
+$ cloudinit-aigen "Ubuntu VM with Docker, a non-root user called deploy, and this SSH key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB84Gfl7oZpojmHJO2DWJbPf0iy0kP+nL3wrH0MrZHpe deploy@laptop"
 ```
 
 ```yaml
@@ -13,7 +13,7 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     ssh_authorized_keys:
-      - ssh-ed25519 AAAA...
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB84Gfl7oZpojmHJO2DWJbPf0iy0kP+nL3wrH0MrZHpe deploy@laptop
 packages:
   - docker.io
 runcmd:
